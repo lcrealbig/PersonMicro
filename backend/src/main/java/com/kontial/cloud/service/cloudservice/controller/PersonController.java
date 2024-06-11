@@ -1,4 +1,4 @@
-package com.kontial.cloud.service.cloudservice;
+package com.kontial.cloud.service.cloudservice.controller;
 
 import com.kontial.cloud.service.cloudservice.persistence.InMemoryDataSource;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,14 +1,19 @@
 package com.kontial.cloud.service.cloudservice.model;
 
 import jakarta.persistence.Entity;
-import lombok.Data;
-
+import jakarta.persistence.Id;
+import lombok.*;
 
 
 @Entity
-@Data
-public final class Person {
-    private final String id;
-    private final String name;
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class Person {
+    @Id
+    private String id;
+    private String name;
+
 
 }
