@@ -1,37 +1,31 @@
 package com.kontial.cloud.service.cloudservice.service;
 
+import com.kontial.cloud.service.cloudservice.exception.PersonValidationException;
 import com.kontial.cloud.service.cloudservice.model.Person;
-import com.kontial.cloud.service.cloudservice.persistence.InMemoryDataSource;
 import com.kontial.cloud.service.cloudservice.repository.PersonRepository;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
 
     @Autowired
-    private InMemoryDataSource inMemoryDataSource;
-
-    @Autowired
     private PersonRepository personRepository;
 
 
-    @PostConstruct
-    public void init() {
-        List<Person> persons = inMemoryDataSource.getAll();
-        personRepository.saveAll(persons);
-
-    }
-
-    public List<String> getPersonNamesSummaryAsc () {
+    public List<String> getPersonNamesSummaryAsc() {
         List<Person> persons = getAll();
         // create hashmap to store key (Name) and value (occurence number)
         HashMap<String, Integer> occurence = new HashMap<>();
@@ -48,7 +42,7 @@ public class PersonService {
                         .collect(Collectors.toList());
         List<String> output = new ArrayList<>();
         for (Map.Entry e : result) {
-           output.add(e.getKey().toString().replace(" ", "space") + ": " + e.getValue());
+            output.add(e.getKey().toString().replace(" ", "space") + ": " + e.getValue());
         }
         return output;
     }
@@ -56,4 +50,41 @@ public class PersonService {
     public List<Person> getAll() {
         return personRepository.findAll();
     }
+
+    public List<Person> getAllWithYearAsBirthday() {
+        return getAll().stream()
+                .map(person -> new Person(person.getId(), person.getName(), person.getBirthday().substring(0, 4)))
+                .collect(Collectors.toList());
+    }
+
+
+    public ResponseEntity<?> addPerson(Person person) throws Exception {
+        Pattern idPattern = Pattern.compile("^[A-Za-z]\\d{4}$");
+        boolean isIdPatternCorrect = idPattern.matcher(person.getId()).matches();
+        boolean isNamePresent = person.getName().length() > 0;
+        boolean isBirthDayFormatted = isValidDate(person.getBirthday());
+        boolean isIdUnique = personRepository.findById(person.getId()).isEmpty();
+
+        if (isNamePresent && isBirthDayFormatted && isIdPatternCorrect && isIdUnique) {
+            try {
+                personRepository.save(person);
+                return ResponseEntity.status(HttpStatus.OK).body("Person " + person.getName() + " has been added successfully.");
+            } catch (Exception e) {
+                throw new Exception("Unexpected Error while persisting Person to database. ");
+            }
+        } else {
+            throw new PersonValidationException("Error while persisting a person - person is in incorrect format. ");
+        }
+    }
+
+    public static boolean isValidDate(String dateStr) {
+        DateTimeFormatter expectedFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            LocalDate.parse(dateStr, expectedFormat);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
 }

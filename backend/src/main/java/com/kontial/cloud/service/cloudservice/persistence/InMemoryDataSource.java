@@ -1,14 +1,21 @@
 package com.kontial.cloud.service.cloudservice.persistence;
 
 import com.kontial.cloud.service.cloudservice.model.Person;
+import com.kontial.cloud.service.cloudservice.repository.PersonRepository;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 
 @Component
 public class InMemoryDataSource {
 
+    @Autowired
+    private PersonRepository personRepository;
     private static List<Person> persons;
 
     public static String generateRandomDateString() {
@@ -16,14 +23,9 @@ public class InMemoryDataSource {
         int endYear = 2005;
         Random random = new Random();
         int year = startYear + random.nextInt(endYear - startYear + 1);
-        int dayOfYear = 1 + random.nextInt(365);
-
-        Calendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.DAY_OF_YEAR, dayOfYear);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        return sdf.format(calendar.getTime());
+        int month = 1 + random.nextInt(12);
+        int day = 1 + random.nextInt(28);
+        return LocalDate.of(year,month,day).toString();
     }
 
 
@@ -51,5 +53,12 @@ public class InMemoryDataSource {
 
     public List<Person> getAll() {
         return persons;
+    }
+
+    @PostConstruct
+    public void init() {
+        List<Person> persons = getAll();
+        personRepository.saveAll(persons);
+
     }
 }

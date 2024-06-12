@@ -1,6 +1,5 @@
 package com.kontial.cloud.service.cloudservice;
 
-import com.kontial.cloud.service.cloudservice.service.PersonService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
