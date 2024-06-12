@@ -1,46 +1,56 @@
 package com.kontial.cloud.service.cloudservice.service;
 
 import com.kontial.cloud.service.cloudservice.model.Person;
+import com.kontial.cloud.service.cloudservice.persistence.InMemoryDataSource;
 import com.kontial.cloud.service.cloudservice.repository.PersonRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
+
+    @Autowired
+    private InMemoryDataSource inMemoryDataSource;
+
     @Autowired
     private PersonRepository personRepository;
 
-    private static List<Person> persons;
-
-    static {
-        persons = new ArrayList<>();
-        persons.add(new Person("h2314", "Thomas"));
-        persons.add(new Person("f5962", "Thomas"));
-        persons.add(new Person("e5891", "Evelin"));
-        persons.add(new Person("t7811", "Oliver"));
-        persons.add(new Person("z5894", "Oliver"));
-        persons.add(new Person("s8971", "Oliver"));
-        persons.add(new Person("u5841", "Oliver"));
-        persons.add(new Person("n2361", "Jennifer"));
-        persons.add(new Person("w2054", "John"));
-        persons.add(new Person("x9815", "Mike"));
-        persons.add(new Person("c6358", "Henry"));
-        persons.add(new Person("a2601", "Lucas"));
-        persons.add(new Person("e8450", "Alice"));
-        persons.add(new Person("w9640", "Alice"));
-        persons.add(new Person("e5036", "Alice"));
-        persons.add(new Person("t8405", "Andrea"));
-        persons.add(new Person("u7840", "Ava"));
-        persons.add(new Person("i6922", "Ava"));
-    }
 
     @PostConstruct
     public void init() {
+        List<Person> persons = inMemoryDataSource.getAll();
         personRepository.saveAll(persons);
+
+    }
+
+    public List<String> getPersonNamesSummaryAsc () {
+        List<Person> persons = getAll();
+        // create hashmap to store key (Name) and value (occurence number)
+        HashMap<String, Integer> occurence = new HashMap<>();
+        for (Person person : persons) {
+            String personName = person.getName();
+            if (occurence.containsKey(personName)) {
+                occurence.merge(personName, 0, (newValue, notUsedParam) -> newValue + 1);
+            } else occurence.put(personName, 1);
+        }
+        List<Map.Entry<String, Integer>> result =
+                occurence.entrySet()
+                        .stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .collect(Collectors.toList());
+        List<String> output = new ArrayList<>();
+        for (Map.Entry e : result) {
+           output.add(e.getKey().toString().replace(" ", "space") + ": " + e.getValue());
+        }
+        return output;
     }
 
     public List<Person> getAll() {
