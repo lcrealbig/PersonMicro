@@ -32,7 +32,7 @@ public class PersonServiceTest {
 
     @Test
     @Name("Checking the actual output - incomplete expectation")
-    void shouldFail() {
+    void should() {
         //given - an expectation
         List<String> expected = List.of("Alice: 3","Andrea: 1","Ava: 2","Evelin: 1","Henry: 1","John: 1","Lucas: 1","Mike: 1","Oliver: 4","Thomas: 2");
 

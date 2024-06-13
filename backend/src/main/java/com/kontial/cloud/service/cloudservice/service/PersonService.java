@@ -45,11 +45,9 @@ public class PersonService {
             output.add(e.getKey().toString().replace(" ", "space") + ": " + e.getValue());
         }
         return output;
+
     }
 
-    public List<Person> getAll() {
-        return personRepository.findAll();
-    }
 
     public List<Person> getAllWithYearAsBirthday() {
         return getAll().stream()
@@ -57,27 +55,23 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
-
     public ResponseEntity<?> addPerson(Person person) throws Exception {
         Pattern idPattern = Pattern.compile("^[A-Za-z]\\d{4}$");
         boolean isIdPatternCorrect = idPattern.matcher(person.getId()).matches();
         boolean isNamePresent = person.getName().length() > 0;
-        boolean isBirthDayFormatted = isValidDate(person.getBirthday());
+        boolean isBirthDayFormatted = isValidDateFormat(person.getBirthday());
         boolean isIdUnique = personRepository.findById(person.getId()).isEmpty();
 
         if (isNamePresent && isBirthDayFormatted && isIdPatternCorrect && isIdUnique) {
-            try {
-                personRepository.save(person);
-                return ResponseEntity.status(HttpStatus.OK).body("Person " + person.getName() + " has been added successfully.");
-            } catch (Exception e) {
-                throw new Exception("Unexpected Error while persisting Person to database. ");
-            }
+            personRepository.save(person);
+            return ResponseEntity.status(HttpStatus.OK).body("Person " + person.getName() + " has been added successfully.");
+
         } else {
             throw new PersonValidationException("Error while persisting a person - person is in incorrect format. ");
         }
     }
 
-    public static boolean isValidDate(String dateStr) {
+    public static boolean isValidDateFormat(String dateStr) {
         DateTimeFormatter expectedFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
             LocalDate.parse(dateStr, expectedFormat);
@@ -86,5 +80,10 @@ public class PersonService {
             return false;
         }
     }
+
+    public List<Person> getAll() {
+        return personRepository.findAll();
+    }
+
 
 }
