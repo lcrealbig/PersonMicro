@@ -13,6 +13,8 @@ export class PersonValidationService {
 
   isIdPatternCorrect(id: string): boolean{
     const idPattern = /^[A-Za-z]\d{4}$/;
+    console.log('inValidation');
+    
     return idPattern.test(id);
   }
 

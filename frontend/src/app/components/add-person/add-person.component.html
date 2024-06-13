@@ -1,14 +1,21 @@
-<div class="registrationForm">
-    <div>
-      <label for="Id">ID:</label>
-      <input id="email" value="" />
+<div class="formContainer">
+    <form [formGroup]="addPersonForm" (ngSubmit)="onSubmit()" class="registrationForm">
+    <div class="registrationForm">
+        <div class="info-message">
+        <label for="Id">ID:</label>
+        <input id="email" value="" />
+        <div class="id-info-message" [class.hidden]="isIdPatternCorrect()">
+            Id must start with a letter followed by four digits.
+          </div>
+        </div>
+        <div>
+        <label for="Name">Name:</label>
+        <input type="text" id="email" formControlName="id" required />
+        </div>
+        <div>
+        <label for="Birthday">Birthday:</label>
+        <input id="email" value="" />
+        </div>
     </div>
-    <div>
-      <label for="Name">Name:</label>
-      <input id="email" value="" />
-    </div>
-    <div>
-      <label for="Birthday">Birthday:</label>
-      <input id="email" value="" />
-    </div>
+    </form>
 </div>
