@@ -12,10 +12,12 @@ export class PersonValidationService {
   constructor() { }
 
   isIdPatternCorrect(id: string): boolean{
-    const idPattern = /^[A-Za-z]\d{4}$/;
-    console.log('inValidation');
+      console.log('id lenght ', id.length);
+      
+      const idPattern = /^[A-Za-z]\d{4}$/;
+      console.log('inValidation');
     
-    return idPattern.test(id);
+    return id.length > 0 && idPattern.test(id);
   }
 
   isValidDateFormat(dateStr: string): boolean {
@@ -30,6 +32,10 @@ export class PersonValidationService {
     } catch {
         return false;
     }
+}
+
+isIdLengthValid(id: string){
+return id.length === 5;
 }
 
 }

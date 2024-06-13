@@ -1,21 +1,21 @@
 <div class="formContainer">
     <form [formGroup]="addPersonForm" (ngSubmit)="onSubmit()" class="registrationForm">
-    <div class="registrationForm">
-        <div class="info-message">
-        <label for="Id">ID:</label>
-        <input id="email" value="" />
-        <div class="id-info-message" [class.hidden]="isIdPatternCorrect()">
-            Id must start with a letter followed by four digits.
-          </div>
+        <div class="registrationForm">
+            <div class="info-message">
+            <label for="id">ID:</label>
+            <input type="text" id="id" formControlName="id" required (input)="onInput()"/>
+                <div class="id-info-message" [class.hidden]="hiddenValidationMessage()">
+                    Id must start with a letter followed by four digits.
+                </div>
+            </div>
+                <div>
+                <label for="Name">Name:</label>
+                <input type="text" id="name" formControlName="name" required />
+                </div>
+            <div>
+            <label for="Birthday">Birthday:</label>
+            <input id="email" value="" />
+            </div>
         </div>
-        <div>
-        <label for="Name">Name:</label>
-        <input type="text" id="email" formControlName="id" required />
-        </div>
-        <div>
-        <label for="Birthday">Birthday:</label>
-        <input id="email" value="" />
-        </div>
-    </div>
     </form>
 </div>

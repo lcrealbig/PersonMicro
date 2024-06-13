@@ -10,6 +10,8 @@ import { PersonValidationService } from 'src/app/validation/person-validation.se
   styleUrls: ['./add-person.component.css']
 })
 export class AddPersonComponent {
+  onInput(): void {
+  }
 onSubmit() {
 throw new Error('Method not implemented.');
 }
@@ -24,11 +26,24 @@ throw new Error('Method not implemented.');
       birthday:['',[Validators.required, Validators.minLength(5)]],
     })
   }
-  isIdPatternCorrect() {
+  isIdPatternCorrect(): boolean{
     const id = this.addPersonForm.get('id').value;
     console.log('id ', id);
-    
     return this.personValidation.isIdPatternCorrect(id);
+  
+  }
+
+  isIdLengthValid(): boolean{
+    const id = this.addPersonForm.get('id').value;
+    return this.personValidation.isIdLengthValid(id);
+  }
+
+  hiddenValidationMessage(): boolean {
+    const id = this.addPersonForm.get('id').value;
+    if (id.length === 0) {
+      return true;
+    }
+    return id.length === 5 || /^[A-Za-z]\d{4}$/.test(id);
   }
 }
 
