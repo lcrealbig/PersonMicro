@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AddPersonComponent } from './components/add-person/add-person.component';
 import { PersonTableComponent } from './components/person-table/person-table.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

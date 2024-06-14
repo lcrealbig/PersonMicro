@@ -81,6 +81,12 @@ public class PersonService {
         }
     }
 
+    public ResponseEntity<String> isIdUnique(String id) {
+        boolean isIdUnique = personRepository.findById(id).isEmpty();
+        if (isIdUnique) return ResponseEntity.status(HttpStatus.OK).body("unique");
+        return ResponseEntity.status(HttpStatus.OK).body("taken");
+    }
+
     public List<Person> getAll() {
         return personRepository.findAll();
     }
