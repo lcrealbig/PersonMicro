@@ -30,7 +30,7 @@ public class PersonController {
     }
 
     @RequestMapping(value = "/persons", method = RequestMethod.POST)
-    public ResponseEntity<?> addPerson(@RequestBody Person person) throws Exception {
+    public ResponseEntity<Person> addPerson(@RequestBody Person person) throws Exception {
         return personService.addPerson(person);
 
     }

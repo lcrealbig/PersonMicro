@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Person } from 'src/app/model/person';
-import { PersonService } from 'src/app/service/person.service';
-import { PersonValidationService } from 'src/app/validation/person-validation.service';
+import { NotificationService } from 'src/app/services/notificationService/notification.service';
+import { PersonService } from 'src/app/services/personService/person.service';
+import { PersonValidationService } from 'src/app/services/validationService/person-validation.service';
 
 @Component({
   selector: 'app-add-person',
@@ -16,7 +17,7 @@ export class AddPersonComponent {
   person!: Person;
   addPersonForm: any;
   
-  constructor(private formBuilder: FormBuilder, private personService: PersonService, private personValidation: PersonValidationService){
+  constructor(private formBuilder: FormBuilder, private personService: PersonService, private personValidation: PersonValidationService, private notification: NotificationService){
 
     this.addPersonForm = this.formBuilder.group({
       id: ['',[Validators.required, Validators.minLength(5)]],
@@ -29,22 +30,28 @@ export class AddPersonComponent {
     const id = this.addPersonForm.get('id').value;
     const name = this.addPersonForm.get('name').value;
     const birthday = this.addPersonForm.get('birthday').value;
-
-    const pers  = {
+  
+    const pers = {
       id: id,
       name: name,
       birthday: birthday
-    }
-    const response = this.personService.createPerson(pers).subscribe({
-      next: () => {
-        console.log('person created succesfully')
+    };
+  
+    this.personService.createPerson(pers).subscribe({
+      next: (response) => {
+        console.log(' resp',response);
+        this.notification.showNotification(`Success: ${response.name} has been successfully added to database!`, 'Close', 'success-snackbar');
       },
       error: (error) => {
-        console.error('Error registering person:', error);
-      },
+        if (error.status === 400){
+          this.notification.showNotification(`Wrong data sent to a server. Error http status is: ${error.status}  `, 'Close', 'error-snackbar');
+
+        }
+        this.notification.showNotification(`Failure: ${error.status}  `, 'Close', 'error-snackbar');
+        console.error('Error registering person:' , error);
+      }
     });
-    console.log(response)
-    }
+  }
 
   isIdLengthValid(): boolean{
     const id = this.addPersonForm.get('id').value;

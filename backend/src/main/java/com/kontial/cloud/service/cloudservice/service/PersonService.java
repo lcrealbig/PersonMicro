@@ -55,7 +55,7 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<?> addPerson(Person person) throws Exception {
+    public ResponseEntity<Person> addPerson(Person person) throws Exception {
         Pattern idPattern = Pattern.compile("^[A-Za-z]\\d{4}$");
         boolean isIdPatternCorrect = idPattern.matcher(person.getId()).matches();
         boolean isNamePresent = person.getName().length() > 0;
@@ -64,7 +64,7 @@ public class PersonService {
 
         if (isNamePresent && isBirthDayFormatted && isIdPatternCorrect && isIdUnique) {
             personRepository.save(person);
-            return ResponseEntity.status(HttpStatus.OK).body("Person " + person.getName() + " has been added successfully.");
+            return ResponseEntity.status(HttpStatus.OK).body(person);
 
         } else {
             throw new PersonValidationException("Error while persisting a person - person is in incorrect format. ");
