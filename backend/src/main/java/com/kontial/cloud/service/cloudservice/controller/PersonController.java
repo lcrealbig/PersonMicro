@@ -35,8 +35,8 @@ public class PersonController {
 
     }
 
-    @RequestMapping(value = "/persons/checkid", method = RequestMethod.POST)
-    public ResponseEntity<?> addPerson(@RequestBody String personId) {
+    @RequestMapping(value = "/persons/checkid/{personId}", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> isIdUnique (@PathVariable String personId) {
         return personService.isIdUnique(personId);
     }
 

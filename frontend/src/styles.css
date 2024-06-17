@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+.success-snackbar {
+    background-color: green;
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+  
+  .error-snackbar {
+    background-color: red;
+    width: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+  
+  .success-snackbar::before {
+    content: '✓';
+    margin-right: 8px;
+  }
+  
+  .error-snackbar::before {
+    content: '✗';
+    margin-right: 12px;
+  }

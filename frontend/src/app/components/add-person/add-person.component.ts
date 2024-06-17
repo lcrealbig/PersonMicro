@@ -12,43 +12,44 @@ import { PersonValidationService } from 'src/app/services/validationService/pers
 })
 export class AddPersonComponent {
 
-
-  title = 'frontend';
   person!: Person;
   addPersonForm: any;
-  
-  constructor(private formBuilder: FormBuilder, private personService: PersonService, private personValidation: PersonValidationService, private notification: NotificationService){
+  isIdUnique: boolean = false;
+  idStatusText: string = '';
 
+  constructor(private formBuilder: FormBuilder,
+              private personService: PersonService,
+              private personValidation: PersonValidationService,
+              private notification: NotificationService) {
     this.addPersonForm = this.formBuilder.group({
       id: ['',[Validators.required, Validators.minLength(5)]],
       name: ['',[Validators.required, Validators.minLength(2)]],
-      birthday:['',[Validators.required, Validators.minLength(5)]],
+      birthday:['',[Validators.required,Validators.maxLength(10), Validators.minLength(10)]],
     })
   }
 
-  onSubmit() {
+ async onSubmit() {
     const id = this.addPersonForm.get('id').value;
     const name = this.addPersonForm.get('name').value;
     const birthday = this.addPersonForm.get('birthday').value;
   
-    const pers = {
+    const person = {
       id: id,
       name: name,
       birthday: birthday
     };
   
-    this.personService.createPerson(pers).subscribe({
+    this.personService.createPerson(person).subscribe({
       next: (response) => {
-        console.log(' resp',response);
         this.notification.showNotification(`Success: ${response.name} has been successfully added to database!`, 'Close', 'success-snackbar');
       },
       error: (error) => {
-        if (error.status === 400){
-          this.notification.showNotification(`Wrong data sent to a server. Error http status is: ${error.status}  `, 'Close', 'error-snackbar');
+        if (error.status === 400) {
+          this.notification.showNotification(`Wrong data sent to a server; Id is already taken. Error http status is: ${error.status}  `, 'Close', 'error-snackbar');
 
+        } else if (error.status >= 500) {
+          this.notification.showNotification(`Failure, Server could not proceed the request: ${error.status}  `, 'Close', 'error-snackbar');
         }
-        this.notification.showNotification(`Failure: ${error.status}  `, 'Close', 'error-snackbar');
-        console.error('Error registering person:' , error);
       }
     });
   }
@@ -71,6 +72,38 @@ export class AddPersonComponent {
   isValidDateFormat(): boolean {
     const birthday = this.addPersonForm.get('birthday').value;
     return this.personValidation.isValidDateFormat(birthday);
+  }
+
+  isPersonIdUnique() {
+    const id = this.addPersonForm.get('id').value;
+     this.personValidation.isIdUnique(id).subscribe({
+      next: (response) => {
+        if (response === true){
+          this.idStatusText = " Id is UNIQUE";
+        } else if (response === false){
+          this.idStatusText = " Id is TAKEN";
+        }
+      },
+      error: (error) => {
+        if (error.status === 400) {
+          this.notification.showNotification(`Wrong data sent to a server. Error http status is: ${error.status}  `, 'Close', 'error-snackbar');
+        } else if (error.status >= 500) {
+          this.notification.showNotification(`Failure, Server could not proceed the request: ${error.status}  `, 'Close', 'error-snackbar');
+          
+        }
+        this.idStatusText = 'Error while checking id'
+      }
+    });
+  }
+
+ setIdStatus(): string {
+  this.isPersonIdUnique();
+    if(this.isIdUnique){
+      return this.idStatusText = 'this id is unique.'
+    } else if (!this.isIdUnique){ 
+      return this.idStatusText = 'this id is Taken.'
+    }
+    return this.idStatusText;
   }
 }
 

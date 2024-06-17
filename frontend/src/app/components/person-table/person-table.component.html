@@ -1,1 +1,22 @@
-<div>Show me the table</div>
+<div class="person-table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Birthday</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let person of persons">
+          <td>{{ person.id }}</td>
+          <td>
+            <span>{{ person.name }}</span>
+          </td>
+          <td>
+            <span>{{ person.birthday }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
