@@ -26,19 +26,15 @@ export class PersonValidationService {
     }
 }
 
-isIdLengthValid(id: string){
- return id.length === 5;
-}
-
 isIdPatternValid(id: string): boolean {
   if (id.length === 0) {
     return true;
   }
-  return id.length === 5 || /^[A-Za-z]\d{4}$/.test(id);
+  return id.length === 5 && /^[A-Za-z]\d{4}$/.test(id);
 }
 
-isNameNotEmpty(name: string): boolean{
-  return name.length > 0;
+isFieldNotEmpty(input: string): boolean{
+  return input.length > 0;
 }
 
 isIdUnique(personId: string) {

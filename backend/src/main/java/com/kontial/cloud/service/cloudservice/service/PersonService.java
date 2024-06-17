@@ -31,7 +31,7 @@ public class PersonService {
         return nameOccurrenceMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
-                .map(entry -> entry.getKey().replace(" ", "space") + ": " + entry.getValue())
+                .map(entry -> entry.getKey() + ": " + entry.getValue())
                 .collect(Collectors.toList());
     }
 

@@ -32,12 +32,12 @@ public class PersonController {
         return personService.addPerson(person);
     }
 
-    @RequestMapping(value = "/persons/checkid/{personId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/person/checkid/{personId}", method = RequestMethod.GET)
     public ResponseEntity<Boolean> isIdUnique(@PathVariable String personId) {
         return personService.isIdUnique(personId);
     }
 
-    @RequestMapping(value = "/persons", method = RequestMethod.PUT)
+    @RequestMapping(value = "/person", method = RequestMethod.PUT)
     public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
         return personService.updatePerson(person);
     }

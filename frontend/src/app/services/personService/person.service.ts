@@ -9,33 +9,34 @@ import {HttpClient} from '@angular/common/http';
 })
 export class PersonService {
 
-  commonPersonOperationUrl: string =  'http://localhost:8080/api/persons'
-  posCheckIdUrl: string =  'http://localhost:8080/api/persons/checkid/{personId}'
-  postPersonUrl: string =  'http://localhost:8080/api/person'
+  personsUrl: string = 'http://localhost:8080/api/persons';
+  postCheckIdUrl: string = 'http://localhost:8080/api/person/checkid/{personId}';
+  personUrl: string = 'http://localhost:8080/api/person';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   createPerson(person: Person) {
-    return this.http.post<Person>(this.postPersonUrl, person).pipe(
+    return this.http.post<Person>(this.personUrl, person).pipe(
       map(res => {
         return res;
       })
-    )
+    );
   }
 
   isPersonIdUnique(personId: string) {
-    return this.http.get<Boolean>(this.posCheckIdUrl.replace('{personId}', personId)).pipe(
+    return this.http.get<Boolean>(this.postCheckIdUrl.replace('{personId}', personId)).pipe(
       map(res => {
         return res;
       })
-    )
+    );
   }
 
   getAllPersons() {
-    return this.http.get<Person[]>(this.commonPersonOperationUrl).pipe(
+    return this.http.get<Person[]>(this.personsUrl).pipe(
       map(res => {
         return res;
       })
-    )
+    );
   }
 }

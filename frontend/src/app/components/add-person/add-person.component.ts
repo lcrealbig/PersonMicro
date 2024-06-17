@@ -22,17 +22,16 @@ export class AddPersonComponent {
               private personValidation: PersonValidationService,
               private notification: NotificationService) {
     this.addPersonForm = this.formBuilder.group({
-      id: ['',[Validators.required, Validators.minLength(5)]],
+      id: ['',[Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
       name: ['',[Validators.required, Validators.minLength(2)]],
       birthday:['',[Validators.required,Validators.maxLength(10), Validators.minLength(10)]],
-    })
+    });
   }
 
  async onSubmit() {
     const id = this.addPersonForm.get('id').value;
     const name = this.addPersonForm.get('name').value;
     const birthday = this.addPersonForm.get('birthday').value;
-  
     const person = {
       id: id,
       name: name,
@@ -46,17 +45,11 @@ export class AddPersonComponent {
       error: (error) => {
         if (error.status === 400) {
           this.notification.showNotification(`Wrong data sent to a server; Id is already taken. Error http status is: ${error.status}  `, 'Close', 'error-snackbar');
-
         } else if (error.status >= 500) {
           this.notification.showNotification(`Failure, Server could not proceed the request: ${error.status}  `, 'Close', 'error-snackbar');
         }
       }
     });
-  }
-
-  isIdLengthValid(): boolean{
-    const id = this.addPersonForm.get('id').value;
-    return this.personValidation.isIdLengthValid(id);
   }
 
   isIdPatternValid(): boolean {
@@ -66,7 +59,12 @@ export class AddPersonComponent {
 
   isNameNotEmpty(): boolean {
     const name = this.addPersonForm.get('name').value;
-    return this.personValidation.isNameNotEmpty(name);
+    return this.personValidation.isFieldNotEmpty(name);
+  }
+
+  isIdNotEmpty(): boolean {
+    const id = this.addPersonForm.get('id').value;
+    return this.personValidation.isFieldNotEmpty(id);
   }
 
   isValidDateFormat(): boolean {
@@ -89,9 +87,9 @@ export class AddPersonComponent {
           this.notification.showNotification(`Wrong data sent to a server. Error http status is: ${error.status}  `, 'Close', 'error-snackbar');
         } else if (error.status >= 500) {
           this.notification.showNotification(`Failure, Server could not proceed the request: ${error.status}  `, 'Close', 'error-snackbar');
-          
         }
         this.idStatusText = 'Error while checking id'
+        this.notification.showNotification(`Failure, Server could not proceed the request: ${error.status}  `, 'Close', 'error-snackbar');
       }
     });
   }
@@ -106,5 +104,3 @@ export class AddPersonComponent {
     return this.idStatusText;
   }
 }
-
-
