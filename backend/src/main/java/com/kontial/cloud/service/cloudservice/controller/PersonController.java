@@ -27,7 +27,7 @@ public class PersonController {
         return personService.getPersonNamesSummaryAsc();
     }
 
-    @RequestMapping(value = "/persons", method = RequestMethod.POST)
+    @RequestMapping(value = "/person", method = RequestMethod.POST)
     public ResponseEntity<Person> addPerson(@RequestBody Person person) throws Exception {
         return personService.addPerson(person);
     }

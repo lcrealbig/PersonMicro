@@ -6,10 +6,10 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Component
 public class InMemoryDataSource {
@@ -25,9 +25,8 @@ public class InMemoryDataSource {
         int year = startYear + random.nextInt(endYear - startYear + 1);
         int month = 1 + random.nextInt(12);
         int day = 1 + random.nextInt(28);
-        return LocalDate.of(year,month,day).toString();
+        return LocalDate.of(year, month, day).toString();
     }
-
 
     static {
         persons = new ArrayList<>();
@@ -59,6 +58,5 @@ public class InMemoryDataSource {
     public void init() {
         List<Person> persons = getAll();
         personRepository.saveAll(persons);
-
     }
 }

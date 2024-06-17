@@ -11,12 +11,12 @@ export class PersonService {
 
   commonPersonOperationUrl: string =  'http://localhost:8080/api/persons'
   posCheckIdUrl: string =  'http://localhost:8080/api/persons/checkid/{personId}'
-
+  postPersonUrl: string =  'http://localhost:8080/api/person'
 
   constructor(private http: HttpClient) { }
 
   createPerson(person: Person) {
-    return this.http.post<Person>(this.commonPersonOperationUrl, person).pipe(
+    return this.http.post<Person>(this.postPersonUrl, person).pipe(
       map(res => {
         return res;
       })

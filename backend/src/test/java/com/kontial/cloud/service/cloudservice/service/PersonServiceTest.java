@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 
-
 @SpringBootTest
 public class PersonServiceTest {
 
@@ -19,12 +18,13 @@ public class PersonServiceTest {
     @Test
     @Name("Checking the actual output")
     void shouldReturnDuplicatedNamesTotalAscending() {
-        //given - an expectation
-        List<String> expected = List.of("Alice: 3","Andrea: 1","Ava: 2","Evelin: 1","Henry: 1","Jennifer: 1","John: 1","Lucas: 1","Mike: 1","Oliver: 4","Thomas: 2");
+        // given - an expectation
+        List<String> expected = List.of("Alice: 3", "Andrea: 1", "Ava: 2", "Evelin: 1", "Henry: 1", "Jennifer: 1", "John: 1", "Lucas: 1", "Mike: 1", "Oliver: 4", "Thomas: 2");
 
-        //when - running actual method
+        // when - running actual method
         var actual = personService.getPersonNamesSummaryAsc();
 
+        // assert
         Assertions.assertEquals(expected.size(), actual.size());
         Assertions.assertEquals(expected, actual);
     }
@@ -32,16 +32,17 @@ public class PersonServiceTest {
     @Test
     @Name("Checking the actual output - incomplete expectation")
     void shouldNotMatchActualSizeAndContent() {
-        //given - an expectation
-        List<String> expected = List.of("Alice: 3","Andrea: 1","Ava: 2","Evelin: 1","Henry: 1","John: 1","Lucas: 1","Mike: 1","Oliver: 4","Thomas: 2");
+        // given - an expectation
+        List<String> expected = List.of("Alice: 3", "Andrea: 1", "Ava: 2", "Evelin: 1", "Henry: 1", "John: 1", "Lucas: 1", "Mike: 1", "Oliver: 4", "Thomas: 2");
 
-        //when - running actual method
+        // when - running actual method
         var actual = personService.getPersonNamesSummaryAsc();
 
+        // assert
         Assertions.assertNotEquals(expected.size(), actual.size());
         Assertions.assertNotEquals(expected, actual);
     }
-
-
-
 }
+
+
+
