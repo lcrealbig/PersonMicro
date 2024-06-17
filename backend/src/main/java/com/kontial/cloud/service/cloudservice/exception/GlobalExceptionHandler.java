@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(PersonValidationException.class)
-    public ResponseEntity<String> handlePersonValidationException(PersonValidationException e) {
+    @ExceptionHandler(PersonGeneralClientException.class)
+    public ResponseEntity<String> handlePersonValidationException(PersonGeneralClientException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 

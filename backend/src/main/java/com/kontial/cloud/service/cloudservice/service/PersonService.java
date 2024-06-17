@@ -1,6 +1,6 @@
 package com.kontial.cloud.service.cloudservice.service;
 
-import com.kontial.cloud.service.cloudservice.exception.PersonValidationException;
+import com.kontial.cloud.service.cloudservice.exception.PersonGeneralClientException;
 import com.kontial.cloud.service.cloudservice.model.Person;
 import com.kontial.cloud.service.cloudservice.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ public class PersonService {
             return ResponseEntity.status(HttpStatus.OK).body(person);
 
         } else {
-            throw new PersonValidationException("Error while persisting a person - person is in incorrect format. ");
+            throw new PersonGeneralClientException("Error while persisting a person - person is in incorrect format. ");
         }
     }
 
@@ -92,4 +92,21 @@ public class PersonService {
     }
 
 
+    public ResponseEntity<Person> updatePerson(Person person) {
+        if (personRepository.findById(person.getId()).isPresent()) {
+            personRepository.save(person);
+            return ResponseEntity.status(204).body(person);
+        } else {
+            throw new PersonGeneralClientException("Person you are attempting to edit, does not exist.");
+        }
+    }
+
+    public ResponseEntity<?> deletePersonById(String personId) {
+        if (personRepository.findById(personId).isPresent()) {
+            personRepository.deleteById(personId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            throw new PersonGeneralClientException("Person you are attempting to delete, does not exist.");
+        }
+    }
 }

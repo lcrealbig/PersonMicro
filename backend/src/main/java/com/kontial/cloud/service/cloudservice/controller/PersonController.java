@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("api")
 @CrossOrigin(origins = "*")
@@ -26,30 +25,25 @@ public class PersonController {
     @RequestMapping(value = "/persons/summary", method = RequestMethod.GET)
     public List<String> getAllPersonsSummary() {
         return personService.getPersonNamesSummaryAsc();
-
     }
 
     @RequestMapping(value = "/persons", method = RequestMethod.POST)
     public ResponseEntity<Person> addPerson(@RequestBody Person person) throws Exception {
         return personService.addPerson(person);
-
     }
 
     @RequestMapping(value = "/persons/checkid/{personId}", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> isIdUnique (@PathVariable String personId) {
+    public ResponseEntity<Boolean> isIdUnique(@PathVariable String personId) {
         return personService.isIdUnique(personId);
     }
 
+    @RequestMapping(value = "/persons", method = RequestMethod.PUT)
+    public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
+        return personService.updatePerson(person);
+    }
 
-//	@RequestMapping(value = "/persons", method = RequestMethod.PUT)
-//	public ResponseEntity<?> updatePerson() {
-//		var persons = inMemoryDataSource.getAll();
-//		return ResponseEntity.ok(persons);
-//	}
-
-//	@RequestMapping(value = "/persons", method = RequestMethod.DELETE)
-//	public ResponseEntity<?> deletePerson() {
-//		var persons = inMemoryDataSource.getAll();
-//		return ResponseEntity.ok(persons);
-//	}
+    @RequestMapping(value = "/persons/{personId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deletePerson(@PathVariable String personId) {
+        return personService.deletePersonById(personId);
+    }
 }
