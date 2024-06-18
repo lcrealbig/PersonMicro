@@ -1,0 +1,16 @@
+Q: How do you validate that your code is working properly and why?
+
+A: I am validating my code locally by unit testing, by calling endpoints via postman, using built in debuggers in ide,
+    analyzing logs and regquests on browser's developer console.
+
+Q: How would you store multiple documents (> 5 MB) for persons and why?
+
+A: I would create a separate table for documents, from code perspective I would use @Lob for the columns that would store the documents.
+   Then I would bind Person and Documents table using one-to-many/many-to-many relationships(depends on a requirements).
+
+Q: How would you integrate a authentication for the REST APIs? Which authentication would you use and why?
+
+A: I would use spring security to integrate api's security. Choosing the authentication method depends on who is going to
+    be a consumer of our application.
+    For individual users I would choose oauth2 with jwt or basic username/password auth
+    For other applications calling our api I would go with API keys.
