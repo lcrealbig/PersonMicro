@@ -5,10 +5,6 @@ import { PersonService } from '../personService/person.service';
   providedIn: 'root'
 })
 export class PersonValidationService {
-  [x: string]: any;
-  id: any;
-  name: any;
-  birthday: any;
 
   constructor(private personService: PersonService) { }
 
@@ -24,21 +20,20 @@ export class PersonValidationService {
     } catch {
         return false;
     }
-}
-
-isIdPatternValid(id: string): boolean {
-  if (id.length === 0) {
-    return true;
   }
-  return id.length === 5 && /^[A-Za-z]\d{4}$/.test(id);
-}
 
-isFieldNotEmpty(input: string): boolean{
-  return input.length > 0;
-}
+  isIdPatternValid(id: string): boolean {
+    if (id.length === 0) {
+      return true;
+    }
+    return id.length === 5 && /^[A-Za-z]\d{4}$/.test(id);
+  }
 
-isIdUnique(personId: string) {
-  return this.personService.isPersonIdUnique(personId);
-}
+  isFieldNotEmpty(input: string): boolean{
+    return input.length > 0;
+  }
 
+  isIdUnique(personId: string) {
+    return this.personService.isPersonIdUnique(personId);
+  }
 }

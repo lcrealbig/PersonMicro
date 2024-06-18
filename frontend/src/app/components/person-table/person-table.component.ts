@@ -12,6 +12,7 @@ export class PersonTableComponent implements OnInit {
 
   constructor(private personService: PersonService, private notification: NotificationService){
   }
+
   ngOnInit(): void {
     this.getPersons();
   }
@@ -33,5 +34,4 @@ export class PersonTableComponent implements OnInit {
       }
     });
   }
-
 }
