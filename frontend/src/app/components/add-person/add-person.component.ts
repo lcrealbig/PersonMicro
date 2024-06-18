@@ -96,9 +96,9 @@ export class AddPersonComponent {
 
  setIdStatus(): string {
   this.isPersonIdUnique();
-    if(this.isIdUnique){
+    if (this.isIdUnique) {
       return this.idStatusText = 'this id is unique.'
-    } else if (!this.isIdUnique){ 
+    } else if (!this.isIdUnique) { 
       return this.idStatusText = 'this id is Taken.'
     }
     return this.idStatusText;
